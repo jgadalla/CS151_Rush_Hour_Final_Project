@@ -1,25 +1,25 @@
 import sys
-import rushhour
+import gameboard
 
 if __name__ == '__main__':
     filename = sys.argv[1]
-    with open(filename) as rushhour_file:
-        r = rushhour.load_file(rushhour_file)
+    with open(filename) as rushHourFile:
+        r = gameboard.loadFile(rushHourFile)
 
-    results = rushhour.breadth_first_search(r, max_depth=100)
+    results = gameboard.bfs(r, maxDepth=100)
     solutions = results['solutions']
-    num_solutions = len(solutions)
+    numSolutions = len(solutions)
 
-    if num_solutions == 0:
-        print 'Impossible'
+    if numSolutions == 0:
+        print('Impossible')
         sys.exit(1)
 
     solutions.sort(key=lambda x: len(x))
-    shortest_solution = len(solutions[0])
+    shortestSolution = len(solutions[0])
 
-    if shortest_solution < 20 or num_solutions > 200:
-        print 'Easy'
-    elif shortest_solution > 50 or num_solutions < 20:
-        print 'Hard'
+    if shortestSolution < 20 or numSolutions > 200:
+        print('Easy')
+    elif shortestSolution > 50 or numSolutions < 20:
+        print('Hard')
     else:
-        print 'Moderate'
+        print('Moderate')
