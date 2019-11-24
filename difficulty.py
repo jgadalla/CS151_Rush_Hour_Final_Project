@@ -4,9 +4,9 @@ import gameboard
 if __name__ == '__main__':
     filename = sys.argv[1]
     with open(filename) as rushHourFile:
-        r = gameboard.loadFile(rushHourFile)
+        r = rushhour.loadFile(rushHourFile)
 
-    results = gameboard.bfs(r, maxDepth=100)
+    results = rushhour.bfs(r, maxDepth=100)
     solutions = results['solutions']
     numSolutions = len(solutions)
 

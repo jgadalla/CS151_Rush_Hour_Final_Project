@@ -74,7 +74,6 @@ class RushHour(object):
                     newVehicles.remove(v)
                     newVehicles.add(newVehicle)
                     yield RushHour(newVehicles)
-        print("Ended moves")
 
     
 def loadFile(inFile):
@@ -121,13 +120,13 @@ def solutionSteps(solution):
             r1, r2 = solution[i], solution[i+1]
             v1 = list(r1.vehicles - r2.vehicles)[0]
             v2 = list(r2.vehicles - r1.vehicles)[0]
-            if v1.x < v2.x:
+            if v1.xPos < v2.xPos:
                 steps.append('{0}R'.format(v1.name))
-            elif v1.x > v2.x:
+            elif v1.xPos > v2.xPos:
                 steps.append('{0}L'.format(v1.name))
-            elif v1.y < v2.y:
+            elif v1.yPos < v2.yPos:
                 steps.append('{0}D'.format(v1.name))
-            elif v1.y > v2.y:
+            elif v1.yPos > v2.yPos:
                 steps.append('{0}U'.format(v1.name))
         return steps
         

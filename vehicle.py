@@ -35,7 +35,9 @@ class Vehicle(object):
             self.orientation = orientation
             xEnd = self.xPos
             yEnd = self.yPos + (self.length - 1)
-        
+        else:
+            raise ValueError('Invalid orientation {0}'.format(orientation))
+            
         if xEnd > 5 or yEnd > 5:
             raise ValueError('Invalid configuration')
     
