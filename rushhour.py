@@ -1,9 +1,26 @@
 import sys
+import heapq
 from collections import deque
 from vehicle import Vehicle
 
 GOAL_VEHICLE = Vehicle('X', 4, 2, 'H')
 
+class PriorityQueue:
+    '''A priority queue. Each item in the queue is associated with a priority. The queue gives efficient access to the minimum priority item.'''
+    def __init__(self):
+        self.__heap = []
+
+    def push(self, item, priority):
+        pair = (priority, item)
+        heapq.heappush(self.__heap, pair)
+
+    def pop(self):
+        (priority, item) = heapq.heappop(self.__heap)
+        return item, priority
+
+    def isEmpty(self):
+        return len(self.__heap) == 0
+    
 class RushHour(object):
 
     def __init__(self, vehicles):
@@ -112,6 +129,41 @@ def bfs(r, maxDepth=25):
         return {'visited': visited,
                 'solutions': solutions,
                 'depthStates': depthStates}
+
+def aStarSearch(r, maxDepth=25):
+    visited = set()
+    solutions = list()
+    depthStates = dict()
+    cost = 0
+    evalu = 0
+    queue = PriorityQueue()
+    queue.push((r, tuple(), cost), evalu)
+    while not queue.isEmpty():
+        s, score = queue.pop()
+        board = s[0]
+        path = s[1]
+        curCost = s[2]
+        newPath = path + tuple([board])
+        depthStates[len(newPath)] = depthStates.get(len(newPath), 0) + 1
+        if len(newPath) >= maxDepth:
+            break
+        if s[0] in visited:
+            continue
+        else:
+            visited.add(board)
+
+        if s[0].solved():
+            solutions.append(newPath)
+        else:
+            curCost += 1
+            successors = s[0].moves()
+            for succ in successors:
+                queue.push((succ, newPath, curCost), evalu)
+    return {'visited': visited,
+            'solutions': solutions,
+            'depthStates': depthStates,
+            'cost': curCost
+            }
     
 def solutionSteps(solution):
         """Generate list of steps from a solution path."""
@@ -135,10 +187,10 @@ if __name__ == '__main__':
         with open(filename) as rushHourFile:
             rushhour = loadFile(rushHourFile)
 
-        results = bfs(rushhour, maxDepth=100)
+        results =aStarSearch(rushhour, maxDepth=100)
 
-        print '{0} Solutions found'.format(len(results['solutions']))
+        print("{0} Solutions found".format(len(results['solutions'])))
         for solution in results['solutions']:
-            print 'Solution: {0}'.format(', '.join(solutionSteps(solution)))
-    
-        print '{0} Nodes visited'.format(len(results['visited']))
+            print( 'Solution: {0}'.format(', '.join(solutionSteps(solution))))
+        print( '{0} Cost'.format(results['cost']))
+        print( '{0} Nodes visited'.format(len(results['visited'])))
