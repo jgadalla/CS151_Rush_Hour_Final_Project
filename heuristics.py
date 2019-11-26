@@ -5,7 +5,7 @@ class RedDistHeuristic:
     def eval(self, state):
         foundTargetCar = False
         count = 0
-        for x in state[4]:
+        for x in state[2]:
             if x == "X":
                 foundTargetCar = True
                 continue

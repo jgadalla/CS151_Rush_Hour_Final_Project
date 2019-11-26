@@ -159,7 +159,7 @@ def aStarSearch(r, maxDepth=25):
             curCost += 1
             successors = s[0].moves()
             for succ in successors:
-                queue.push((succ, newPath, curCost), evalu)
+                queue.push((succ, newPath, curCost), RedDistHeuristic(succ))
     return {'visited': visited,
             'solutions': solutions,
             'depthStates': depthStates,
