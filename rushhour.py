@@ -1,5 +1,6 @@
 import sys
 import heapq
+from heuristics import *
 from collections import deque
 from vehicle import Vehicle
 
@@ -135,7 +136,7 @@ def aStarSearch(r, maxDepth=25):
     solutions = list()
     depthStates = dict()
     cost = 0
-    evalu = 0
+    evalu = RedDistHeuristic(r.getBoard())
     queue = PriorityQueue()
     queue.push((r, tuple(), cost), evalu)
     while not queue.isEmpty():
