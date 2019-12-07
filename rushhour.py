@@ -1,6 +1,6 @@
 import sys
 import heapq
-from heuristics import *
+from heuristics import RedDistHeuristic
 from collections import deque
 from vehicle import Vehicle
 
@@ -135,7 +135,8 @@ def aStarSearch(r, maxDepth=25):
     visited = set()
     solutions = list()
     depthStates = dict()
-    cost = 0
+    cost = 1
+    print(r.getBoard())
     evalu = RedDistHeuristic(r.getBoard())
     queue = PriorityQueue()
     queue.push((r, tuple(), cost), evalu)
@@ -146,20 +147,24 @@ def aStarSearch(r, maxDepth=25):
         curCost = s[2]
         newPath = path + tuple([board])
         depthStates[len(newPath)] = depthStates.get(len(newPath), 0) + 1
-        if len(newPath) >= maxDepth:
-            break
+        curCost += 1
         if s[0] in visited:
             continue
         else:
             visited.add(board)
-
         if s[0].solved():
             solutions.append(newPath)
+            return {'visited': visited,
+            'solutions': solutions,
+            'depthStates': depthStates,
+            'cost': curCost
+            }
         else:
-            curCost += 1
             successors = s[0].moves()
             for succ in successors:
-                queue.push((succ, newPath, curCost), RedDistHeuristic(succ))
+                string_board = succ.getBoard()
+                #print(string_board)
+                queue.push((succ, newPath, curCost), evalu.eval(string_board))
     return {'visited': visited,
             'solutions': solutions,
             'depthStates': depthStates,
