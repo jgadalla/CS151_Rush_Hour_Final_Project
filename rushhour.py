@@ -3,6 +3,7 @@ import heapq
 from heuristics import RedDistHeuristic
 from collections import deque
 from vehicle import Vehicle
+from NumCars import NumCars
 
 GOAL_VEHICLE = Vehicle('X', 4, 2, 'H')
 
@@ -136,10 +137,10 @@ def aStarSearch(r, maxDepth=25):
     solutions = list()
     depthStates = dict()
     cost = 1
-    print(r.getBoard())
-    evalu = RedDistHeuristic(r.getBoard())
+    evalu = NumCars(r.getBoard())
+    evalu2 = RedDistHeuristic(r.getBoard)
     queue = PriorityQueue()
-    queue.push((r, tuple(), cost), evalu)
+    queue.push((r, tuple(), cost), r.getBoard()) #evalu.eval(r.getBoard()) + evalu2.eval(r.getBoard()))
     while not queue.isEmpty():
         s, score = queue.pop()
         board = s[0]
@@ -164,7 +165,7 @@ def aStarSearch(r, maxDepth=25):
             for succ in successors:
                 string_board = succ.getBoard()
                 #print(string_board)
-                queue.push((succ, newPath, curCost), evalu.eval(string_board))
+                queue.push((succ, newPath, curCost),  evalu2.eval(string_board) + evalu.eval(string_board))
     return {'visited': visited,
             'solutions': solutions,
             'depthStates': depthStates,
