@@ -1,6 +1,6 @@
 import sys
 import heapq
-from heuristics import LingeringCars
+from heuristics import *
 from combo import Combo
 from collections import deque
 from vehicle import Vehicle
@@ -137,12 +137,14 @@ def aStarSearch(r, maxDepth=25):
     visited = set()
     solutions = list()
     depthStates = dict()
-    cost = 1
-    evalu = NumCars(r.getBoard())
-    evalu2 = LingeringCars(r.getBoard)
-    evalu3 = Combo(r.getBoard)
+    cost = 0
+    nullH = NullHeuristic(r.getBoard())
+    redH = RedDistHeuristic(r.getBoard())
+    carsH = NumCars(r.getBoard())
+    lingerH = LingeringCars(r.getBoard())
+    comboH = Combo(r.getBoard())
     queue = PriorityQueue()
-    queue.push((r, tuple(), cost), r.getBoard()) #evalu.eval(r.getBoard()) + evalu2.eval(r.getBoard()))
+    queue.push((r, tuple(), cost), r.getBoard())
     while not queue.isEmpty():
         s, score = queue.pop()
         board = s[0]
@@ -166,7 +168,7 @@ def aStarSearch(r, maxDepth=25):
             successors = s[0].moves()
             for succ in successors:
                 string_board = succ.getBoard()
-                queue.push((succ, newPath, curCost),  evalu3.eval(string_board))
+                queue.push((succ, newPath, curCost),  carsH.eval(string_board))
     return {'visited': visited,
             'solutions': solutions,
             'depthStates': depthStates,
