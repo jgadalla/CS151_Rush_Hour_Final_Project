@@ -166,7 +166,6 @@ def aStarSearch(r, maxDepth=25):
             successors = s[0].moves()
             for succ in successors:
                 string_board = succ.getBoard()
-                #print(string_board)
                 queue.push((succ, newPath, curCost),  evalu3.eval(string_board))
     return {'visited': visited,
             'solutions': solutions,
